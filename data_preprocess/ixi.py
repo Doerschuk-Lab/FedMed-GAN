@@ -32,8 +32,8 @@ def dataset_preprocess(src_path, dst_path):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="PyTorch IXI")
-    parser.add_argument("--data_path", default="/disk1/medical/IXI", nargs='+', type=str, help="path to train data")
-    parser.add_argument("--generated_path", default="/disk1/medical/ixi", nargs='+', type=str, help="path to target train data")
+    parser.add_argument("--data_path", default="/disk1/medical/IXI", nargs='?', type=str, help="path to train data")
+    parser.add_argument("--generated_path", default="/disk1/medical/ixi", nargs='?', type=str, help="path to target train data")
     args = parser.parse_args()
 
 

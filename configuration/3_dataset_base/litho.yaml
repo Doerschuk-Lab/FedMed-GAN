@@ -1,0 +1,24 @@
+dataset: litho
+source_domain: A
+target_domain: B
+data_path: /home/dy245/Data/TGAP_preprocessed
+valid_path: /home/dy245/Data/TGAP_preprocessed
+data_mode: 'mixed'
+data_num: 1800 # not 6000, we don't have that many slices 
+data_paired_weight: 0.5 
+data_moda_ratio: 0.5
+data_moda_case: 'case1'
+data_partition: manual
+es_higher_limit: 1 
+es_lower_limit: 0
+size: 256 
+num_img_save: 5
+single_img_infer: false
+assigned_images: [['E04_M0002-02MS', 'E04_M0002-02MS', 0], 
+                  ['E04_M0084-02MS', 'E04_M0084-02MS', 0], 
+                  ['E20_M0036-02MS', 'E20_M0036-02MS', 0], 
+                  ['S20_M0022-02MS', 'S20_M0022-02MS', 0], 
+                  ['S04_M0348-02MS', 'S04_M0348-02MS', 0], 
+                  ['S16_M0188-02MS', 'S16_M0188-02MS', 0]]
+
+

@@ -6,6 +6,7 @@ import os
 from tools.utilize import *
 from data_io.brats import BraTS2021
 from data_io.ixi import IXI
+from data_io.litho import Litho
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 from arch_centralized.cyclegan import CycleGAN
@@ -45,6 +46,7 @@ class CentralizedTrain():
         seed_everything(self.para_dict['seed'])
 
         device, device_ids = parse_device_list(self.para_dict['gpu_ids'], int(self.para_dict['gpu_id']))
+        print(f"device: {device}")
         self.device = torch.device("cuda", device)
 
         self.file_path = record_path(self.para_dict)
@@ -198,6 +200,40 @@ class CentralizedTrain():
                                     data_mode='paired',
                                     dataset_splited=True)
             self.assigned_dataset = IXI(root=self.para_dict['data_path'],
+                                     modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
+                                     extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
+                                     noise_type='normal',
+                                     learn_mode='test',
+                                     transform_data=self.severe_transform,
+                                     data_mode='paired',
+                                     dataset_splited=False,
+                                     assigned_data=self.para_dict['single_img_infer'],
+                                     assigned_images=self.para_dict['assigned_images']) 
+        elif self.para_dict['dataset'] == 'litho':
+            assert self.para_dict['source_domain'] in ['A', 'B']
+            assert self.para_dict['target_domain'] in ['A', 'B']
+            self.train_dataset = Litho(root=self.para_dict['data_path'],
+                                    modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
+                                    extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
+                                    noise_type=self.para_dict['noise_type'],
+                                    learn_mode='train',
+                                    transform_data=self.noise_transform,
+                                    data_mode=self.para_dict['data_mode'],
+                                    data_num=self.para_dict['data_num'],
+                                    data_paired_weight=self.para_dict['data_paired_weight'],
+                                    client_weights=self.para_dict['clients_data_weight'],
+                                    dataset_splited=True,
+                                    data_moda_ratio=self.para_dict['data_moda_ratio'],
+                                    data_moda_case=self.para_dict['data_moda_case'])
+            self.valid_dataset = Litho(root=self.para_dict['data_path'],
+                                    modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
+                                    extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
+                                    noise_type='normal',
+                                    learn_mode='test',
+                                    transform_data=self.normal_transform,
+                                    data_mode='paired',
+                                    dataset_splited=True)
+            self.assigned_dataset = Litho(root=self.para_dict['data_path'],
                                      modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
                                      extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
                                      noise_type='normal',

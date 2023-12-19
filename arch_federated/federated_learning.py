@@ -7,6 +7,7 @@ import numpy as np
 from tools.utilize import * 
 from data_io.brats import BraTS2021
 from data_io.ixi import IXI
+from data_io.litho import Litho
 from torch.utils.data import DataLoader
 from tools.utilize import *
 from tools.visualize import plot_sample
@@ -202,6 +203,43 @@ class FederatedTrain():
                                      dataset_splited=False,
                                      assigned_data=self.para_dict['single_img_infer'],
                                      assigned_images=self.para_dict['assigned_images']) 
+        elif self.para_dict['dataset'] == 'litho':
+            assert self.para_dict['source_domain'] in ['A', 'B']
+            assert self.para_dict['target_domain'] in ['A', 'B']
+            self.train_dataset = Litho(root=self.para_dict['data_path'],
+                                    modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
+                                    extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
+                                    noise_type=self.para_dict['noise_type'],
+                                    learn_mode='train',
+                                    transform_data=self.noise_transform,
+                                    data_mode=self.para_dict['data_mode'],
+                                    data_num=self.para_dict['data_num'],
+                                    data_paired_weight=self.para_dict['data_paired_weight'],
+                                    client_weights=self.para_dict['clients_data_weight'],
+                                    dataset_splited=True,
+                                    data_moda_ratio=self.para_dict['data_moda_ratio'],
+                                    data_moda_case=self.para_dict['data_moda_case'])
+            self.valid_dataset = Litho(root=self.para_dict['data_path'],
+                                    modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
+                                    extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
+                                    noise_type='normal',
+                                    learn_mode='test',
+                                    transform_data=self.normal_transform,
+                                    data_mode='paired',
+                                    dataset_splited=True)
+            self.assigned_dataset = Litho(root=self.para_dict['data_path'],
+                                     modalities=[self.para_dict['source_domain'], self.para_dict['target_domain']],
+                                     extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
+                                     noise_type='normal',
+                                     learn_mode='test',
+                                     transform_data=self.severe_transform,
+                                     data_mode='paired',
+                                     dataset_splited=False,
+                                     assigned_data=self.para_dict['single_img_infer'],
+                                     assigned_images=self.para_dict['assigned_images']) 
+        else:
+            raise NotImplementedError('This Dataset Has Not Been Implemented Yet')
+
 
         self.train_loader = DataLoader(self.train_dataset, num_workers=self.para_dict['num_workers'],
                                  batch_size=self.para_dict['batch_size'], shuffle=False)

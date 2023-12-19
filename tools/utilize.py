@@ -139,14 +139,18 @@ def save_image(image, name, image_path):
     torchvision.utils.save_image(image, '{}/{}'.format(image_path, name), normalize=False)
 
 
-def save_model(model, file_path, para_dict, psnr, ssim, fid, kaid):
+def save_model(model, file_path, para_dict, psnr, ssim=None, fid=None, kaid=None):
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     for file in glob.glob('{}/*.pth'.format(file_path)):
         os.remove(file)      
 
-    model_path = '{}/best_model_{}_{}_{:.4f}_{:.4f}_{:.4f}.pth'.format(
-        file_path, para_dict['source_domain'], para_dict['target_domain'], psnr, ssim, fid, kaid)
+    if (ssim is None or fid is None or kaid is None):
+        model_path = '{}/best_model_{}_{}_{:.4f}.pth'.format(
+            file_path, para_dict['source_domain'], para_dict['target_domain'], psnr)
+    else:
+        model_path = '{}/best_model_{}_{}_{:.4f}_{:.4f}_{:.4f}.pth'.format(
+            file_path, para_dict['source_domain'], para_dict['target_domain'], psnr, ssim, fid, kaid)
     torch.save({'model_state_dict': model.state_dict()}, model_path)
 
 def save_model_per_epoch(model, file_path, para_dict, epoch):

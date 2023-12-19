@@ -7,15 +7,15 @@ clip_bound: 1
 sensitivity: 2
 noise_multiplier: 1.07
 # training
-batch_size: 4 
-gpu_id: 0
+batch_size: 8 #originally 4; 16 may be faster, but this can exceed GPU mem
+gpu_id: 1
 gpu_ids:
 - '01234567'
 lr: 0.0001
-num_epoch: 10 
+num_epoch: 1 #originally 10, actually need to specify in command line, because this has a default in config.py
 decay_epoch: 8 
 seed: 3 
-num_workers: 8
+num_workers: 0 #originally 8
 # work file
 work_dir: ./work_dir
 save_log: true
@@ -25,7 +25,7 @@ debug: false
 plot_distribution: false
 plot_num_sample: 2000
 # save and load model
-save_model: false
+save_model: true
 load_model: false
 load_model_dir: None
 # fid

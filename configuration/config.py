@@ -68,10 +68,10 @@ def parse_arguments_federated():
     parser.add_argument('--not-test-client', '-ntc', action='store_true', default=False)
 
     # centralized setting
-    parser.add_argument('--dataset', '-d', type=str, default='ixi', choices=['ixi', 'brats2021'])
+    parser.add_argument('--dataset', '-d', type=str, default='ixi', choices=['ixi', 'brats2021', 'litho'])
     parser.add_argument('--model', '-m', type=str, default='cyclegan', choices=['cyclegan', 'munit', 'unit'])
-    parser.add_argument('--source-domain', '-s', default='pd', choices=['t1', 't2', 'pd', 'flair'])
-    parser.add_argument('--target-domain', '-t', default='t2', choices=['t1', 't2', 'pd', 'flair'])
+    parser.add_argument('--source-domain', '-s', default='pd', choices=['t1', 't2', 'pd', 'flair', 'A', 'B'])
+    parser.add_argument('--target-domain', '-t', default='t2', choices=['t1', 't2', 'pd', 'flair', 'A', 'B'])
     parser.add_argument('--data-path', '-dp', type=str, default=None)
     parser.add_argument('--valid-path', '-vp', type=str, default=None)
 
@@ -128,10 +128,10 @@ def parse_arguments_federated():
     
 def parse_arguments_centralized():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', '-d', type=str, default='ixi', choices=['ixi', 'brats2021'])
+    parser.add_argument('--dataset', '-d', type=str, default='ixi', choices=['ixi', 'brats2021', 'litho'])
     parser.add_argument('--model', '-m', type=str, default='cyclegan', choices=['cyclegan', 'munit', 'unit'])
-    parser.add_argument('--source-domain', '-s', default='pd', choices=['t1', 't2', 'pd', 'flair'])
-    parser.add_argument('--target-domain', '-t', default='t2', choices=['t1', 't2', 'pd', 'flair'])
+    parser.add_argument('--source-domain', '-s', default='pd', choices=['t1', 't2', 'pd', 'flair', 'A', 'B'])
+    parser.add_argument('--target-domain', '-t', default='t2', choices=['t1', 't2', 'pd', 'flair', 'A', 'B'])
     parser.add_argument('--data-path', '-dp', type=str, default=None)
     parser.add_argument('--valid-path', '-vp', type=str, default=None)
 
@@ -193,10 +193,10 @@ def parse_arguments_fid_stats():
     parser = argparse.ArgumentParser("Pre-Calculate Statistics of Images")
     parser.add_argument('--fid-dir', default='./fid_stats', type=str, help='the output path for statistics storage')
     parser.add_argument('--batch-size', type=int, default=50, help='the batchsize for InceptionNetV3')
-    parser.add_argument('--dataset', '-d', type=str, default='brats2021', choices=['ixi', 'brats2021'])
+    parser.add_argument('--dataset', '-d', type=str, default='brats2021', choices=['ixi', 'brats2021', 'litho'])
     parser.add_argument('--gpu-id', '-g', type=str, default=None)
-    parser.add_argument('--source-domain', '-s', default='t1', choices=['t1', 't2', 'pd', 'flair'])
-    parser.add_argument('--target-domain', '-t', default='t2', choices=['t1', 't2', 'pd', 'flair'])
+    parser.add_argument('--source-domain', '-s', default='A', choices=['t1', 't2', 'pd', 'flair', 'A', 'B'])
+    parser.add_argument('--target-domain', '-t', default='B', choices=['t1', 't2', 'pd', 'flair', 'A', 'B'])
     parser.add_argument('--data-path', type=str, default=None)
     parser.add_argument('--valid-path', type=str, default=None)
 
